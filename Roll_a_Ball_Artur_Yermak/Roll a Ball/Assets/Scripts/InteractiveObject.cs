@@ -6,7 +6,7 @@ namespace MyGame
 {
     public abstract class InteractiveObject : MonoBehaviour, IInteractable
     {
-        public event Action<InteractiveObject> OnDestroyChange;
+        protected Color _color;
         public bool IsInteractable { get; } = true;
 
         private void OnTriggerEnter(Collider other)
@@ -16,7 +16,6 @@ namespace MyGame
                 return;
             }
             Interaction();
-            OnDestroyChange?.Invoke(this);
             Destroy(gameObject);
         }
 
@@ -29,9 +28,10 @@ namespace MyGame
 
         public void Action()
         {
+            _color = Random.ColorHSV();
             if (TryGetComponent(out Renderer renderer))
             {
-                renderer.material.color = Random.ColorHSV();
+                renderer.material.color = _color;
             }
         }
     }
