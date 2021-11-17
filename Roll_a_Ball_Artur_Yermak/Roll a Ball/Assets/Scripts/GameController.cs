@@ -1,97 +1,139 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 namespace MyGame
 {
     public sealed class GameController: MonoBehaviour, IDisposable
     {
-        public Text finishGameLabel;
-        public Camera mainCamera;
-        private Animation _shake;
-        private InteractiveObject[] _interactiveObjects;
+        public PlayerType PlayerType = PlayerType.Ball;
+        private ListExecuteObject _interactiveObject;
+        private DisplayWinGame _displayWinGame;
         private DisplayEndGame _displayEndGame;
+        private DisplayBonuses _displayBonuses;
+        private CameraController _cameraController;
+        private InputController _inputController;
+        private int _countBonuses;
+        private int _maxPoints = 4;
+        private Reference _reference;
 
         private void Awake()
         {
-            _shake = mainCamera.GetComponent<Animation>();
-            _interactiveObjects = FindObjectsOfType<InteractiveObject>();
-            _displayEndGame = new DisplayEndGame(finishGameLabel);
-            foreach (var o in _interactiveObjects)
+            _interactiveObject = new ListExecuteObject();
+
+            _reference = new Reference();
+
+            PlayerBase player = null;
+            if (PlayerType == PlayerType.Ball)
+            {
+                player = _reference.PlayerBall;
+            }
+
+            _cameraController = new CameraController(player.transform, _reference.MainCamera.transform);
+            _interactiveObject.AddExecuteObject(_cameraController);
+
+            _inputController = new InputController(player);
+            _interactiveObject.AddExecuteObject(_inputController);
+
+            _displayWinGame = new DisplayWinGame(_reference.WinGame);
+            _displayEndGame = new DisplayEndGame(_reference.Bonuse);
+            _displayBonuses = new DisplayBonuses(_reference.EndGame);
+            foreach (var o in _interactiveObject)
             {
                 if (o is BadBonus badBonus)
                 {
                     badBonus.CaughtPlayer += CaughtPlayer;
                     badBonus.CaughtPlayer += _displayEndGame.GameOver;                
                 }
+                if (o is GoodBonus goodBonus)
+                {
+                    goodBonus.OnPointChange += AddBonuse;
+                }
                 if (o is GoodBonusSpeedUp goodBonusSpeedUp)
                 {
                     goodBonusSpeedUp.PickUpChange += PickUpChange;
                 }
+                if (o is BadBonusSlow badBonusSlow)
+                {
+                    badBonusSlow.PickUpChangeSlow += PickUpChangeSlow;
+                }
             }
+
+            _reference.RestartButton.onClick.AddListener(RestartGame);
+            _reference.RestartButton.gameObject.SetActive(false);
         }
 
-        private void CaughtPlayer(object value)
+        private void RestartGame()
         {
+            SceneManager.LoadScene(0);
+            Time.timeScale = 1.0f;
+        }
+
+        private void CaughtPlayer(string name, Color color)
+        {
+            _reference.RestartButton.gameObject.SetActive(true);
             Time.timeScale = 0.0f;
+        }
+
+        private void AddBonuse(int value)
+        {
+            _countBonuses += value;
+            if (_countBonuses == _maxPoints)
+            {
+                _displayWinGame.WinGame();
+            }
+            _displayBonuses.Display(_countBonuses);
         }
 
         private void PickUpChange()
         {
-            _shake.Play("ShakeCamera");
-            //Vector3 cameraDefaultPos = mainCamera.transform.position;
-            //Vector3 cameraChangePos = new Vector3(cameraDefaultPos.x + Mathf.PingPong(Time.time, 15.0f), cameraDefaultPos.y + Mathf.PingPong(Time.time, 10.0f), cameraDefaultPos.z);
-            //mainCamera.transform.position = cameraChangePos;
+            Debug.Log("Speedof ball is increased by 2");
         }
+
+        private void PickUpChangeSlow()
+        {
+            Debug.Log("Speed of ball is decreased by 1.5");
+        }
+        
 
         private void Update()
         {
-            for (var i = 0; i < _interactiveObjects.Length; i++)
+            for (var i = 0; i < _interactiveObject.Length; i++)
             {
-                var interactiveobject = _interactiveObjects[i];
+                var interactiveobject = _interactiveObject[i];
 
                 if (interactiveobject == null)
                 {
                     continue;
                 }
-
-                if (interactiveobject is IFly fly)
-                {
-                    fly.Fly();
-                }
-
-                if(interactiveobject is IFlicker flicker)
-                {
-                    flicker.Flicker();
-                }
-
-                if(interactiveobject is IRotation rotation)
-                {
-                    rotation.Rotation();
-                }
+                interactiveobject.Execute();
             }
         }
 
        
+
         public void Dispose()
         {
-            foreach (var o in _interactiveObjects)
+            foreach (var o in _interactiveObject)
             {
-                if(o is InteractiveObject interactiveObject)
+                if (o is BadBonus badBonus)
                 {
-                    if (o is BadBonus badBonus)
-                    {
-                        badBonus.CaughtPlayer -= CaughtPlayer;
-                        badBonus.CaughtPlayer -= _displayEndGame.GameOver;
-                    }
-                    if (o is GoodBonusSpeedUp goodBonusSpeedUp)
-                    {
-                        goodBonusSpeedUp.PickUpChange -= PickUpChange;
-                    }
-                    Destroy(interactiveObject.gameObject);
+                    badBonus.CaughtPlayer -= CaughtPlayer;
+                    badBonus.CaughtPlayer -= _displayEndGame.GameOver;
                 }
-                
-
+                if (o is GoodBonus goodBonus)
+                {
+                    goodBonus.OnPointChange -= AddBonuse;
+                }
+                if (o is GoodBonusSpeedUp goodBonusSpeedUp)
+                {
+                    goodBonusSpeedUp.PickUpChange -= PickUpChange;
+                }
+                if (o is BadBonusSlow badBonusSlow)
+                {
+                    badBonusSlow.PickUpChangeSlow -= PickUpChangeSlow;
+                }
             }
         }
 

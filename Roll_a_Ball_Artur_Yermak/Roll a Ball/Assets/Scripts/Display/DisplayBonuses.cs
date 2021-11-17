@@ -1,20 +1,22 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace MyGame
 {
     public sealed class DisplayBonuses
     {
-        private Text _text;
+        private Text _bonuseLabel;
 
-        public DisplayBonuses()
+        public DisplayBonuses(GameObject bonus)
         {
-            _text = Object.FindObjectOfType<Text>();
+            _bonuseLabel = bonus.GetComponentInChildren<Text>();
+            _bonuseLabel.text = String.Empty; 
         }
 
         public void Display(int value)
         {
-            _text.text = $"Вы набрали {value} очко(-а)";
+            _bonuseLabel.text = $"You get {value} points";
         }
     }
 }

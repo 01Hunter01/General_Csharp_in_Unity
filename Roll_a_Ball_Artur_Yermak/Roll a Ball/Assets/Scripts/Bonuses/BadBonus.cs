@@ -10,7 +10,7 @@ namespace MyGame
         private float _speedRotation;
         
 
-        public delegate void CaughtPlayerChange(object value);
+        public delegate void CaughtPlayerChange(string name, Color color);
         private event CaughtPlayerChange _caughtPlayer;
         public event CaughtPlayerChange CaughtPlayer
         {
@@ -26,7 +26,14 @@ namespace MyGame
 
         protected override void Interaction()
         {
-            _caughtPlayer?.Invoke(this);
+            _caughtPlayer?.Invoke(gameObject.name, _color);
+        }
+
+        public override void Execute()
+        {
+            if (!IsInteractable) { return; }
+            Fly();
+            Rotation();
         }
 
         public void Fly()

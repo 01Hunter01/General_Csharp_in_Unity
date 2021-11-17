@@ -8,15 +8,15 @@ namespace MyGame
     {
         private Text _finishGameLabel;
         
-        public DisplayEndGame(Text finishGameLabel)
+        public DisplayEndGame(GameObject endGame)
         {
-            _finishGameLabel = finishGameLabel;
+            _finishGameLabel = endGame.GetComponentInChildren<Text>();
             _finishGameLabel.text = String.Empty;
         }
 
-        public void GameOver(object o)
+        public void GameOver(string name, Color color)
         {
-            _finishGameLabel.text = $"GAME OVER";
+            _finishGameLabel.text = $"GAME OVER. You have been died by {name} with {color} color";
         }
 
     }

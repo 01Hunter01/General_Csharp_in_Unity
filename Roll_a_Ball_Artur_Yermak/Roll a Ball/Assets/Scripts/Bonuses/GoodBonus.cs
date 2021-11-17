@@ -1,24 +1,31 @@
+using System;
 using UnityEngine;
+using static UnityEngine.Random;
 
 namespace MyGame
 {
     public sealed class GoodBonus : InteractiveObject, IFly
     {
-        
+        public int Point;
+        public event Action<int> OnPointChange = delegate { };
         private float _lengthFly;
-        private DisplayBonuses _displayBonuses;
+        
         
 
         private void Awake()
         {
-            
-            _lengthFly = Random.Range(1.0f, 3.0f);
-            _displayBonuses = new DisplayBonuses();
+            _lengthFly = Range(1.0f, 3.0f);
         }
 
         protected override void Interaction()
         {
-            _displayBonuses.Display(5);
+            OnPointChange.Invoke(Point);
+        }
+
+        public override void Execute()
+        {
+            if (!IsInteractable) { return; }
+            Fly();
         }
 
         public void Fly()

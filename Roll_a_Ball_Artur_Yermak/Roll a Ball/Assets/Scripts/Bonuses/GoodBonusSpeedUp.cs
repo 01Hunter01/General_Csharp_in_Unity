@@ -6,7 +6,8 @@ namespace MyGame
     {
         
         private float _lengthFly;
-        public Player player;
+        private PlayerBase _player;
+        private Reference _reference;
 
         public delegate void OnPickUpChange();
         private event OnPickUpChange _pickUpChange;
@@ -17,15 +18,23 @@ namespace MyGame
         }
         private void Awake()
         {
-           
+            _reference = new Reference();
+            _player = _reference.PlayerBall;
+
             _lengthFly = Random.Range(1.0f, 3.0f);
             
         }
 
         protected override void Interaction()
         {
-            player.speed *= 2.0f;
+            _player.speed *= 2.0f;
             _pickUpChange?.Invoke();
+        }
+
+        public override void Execute()
+        {
+            if (!IsInteractable) { return; }
+            Fly();
         }
 
         public void Fly()
