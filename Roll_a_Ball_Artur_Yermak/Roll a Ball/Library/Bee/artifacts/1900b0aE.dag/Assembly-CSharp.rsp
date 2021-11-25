@@ -329,6 +329,8 @@
 "Assets/Scripts/Display/DisplayEndGame.cs"
 "Assets/Scripts/Display/DisplayWinGame.cs"
 "Assets/Scripts/GameController.cs"
+"Assets/Scripts/HomeWork_7/ExamplesHomeWork7.cs"
+"Assets/Scripts/HomeWork_7/ExpressionTask2.cs"
 "Assets/Scripts/InputController.cs"
 "Assets/Scripts/InteractiveObject.cs"
 "Assets/Scripts/Interfaces/IAction.cs"
