@@ -11,6 +11,8 @@ namespace MyGame
         private GameObject _bonuse;
         private GameObject _endGame;
         private GameObject _winGame;
+        private GameObject _speedUp;
+        private GameObject _slow;
         private Canvas _canvas;
         private Button _restartButton;
 
@@ -66,6 +68,32 @@ namespace MyGame
                     _canvas = Object.FindObjectOfType<Canvas>();
                 }
                 return _canvas;
+            }
+        }
+
+        public GameObject SpeedUp
+        {
+            get
+            {
+                if (_speedUp == null)
+                {
+                    var gameObject = Resources.Load<GameObject>("UI/SpeedUp");
+                    _speedUp = Object.Instantiate(gameObject, Canvas.transform);
+                }
+                return _speedUp;
+            }
+        }
+
+        public GameObject Slow
+        {
+            get
+            {
+                if (_slow == null)
+                {
+                    var gameObject = Resources.Load<GameObject>("UI/Slow");
+                    _slow = Object.Instantiate(gameObject, Canvas.transform);
+                }
+                return _slow;
             }
         }
 

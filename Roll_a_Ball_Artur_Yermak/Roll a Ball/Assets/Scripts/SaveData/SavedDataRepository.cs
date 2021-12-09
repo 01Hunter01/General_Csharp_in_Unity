@@ -12,7 +12,6 @@ namespace MyGame
         private const string _fileName = "data.bat";
         private readonly string _path;
 
-        //private InteractiveObject bonus;
 
         public SaveDataRepository()
         {
@@ -38,8 +37,7 @@ namespace MyGame
                 Position = player.transform.position,
                 Name = "ArturY",
                 IsEnabled = true,
-                SpeedBall = player.speed,
-                //bonuse = bonus.GetComponent<GoodBonus>()
+                SpeedBall = player.speed
             };
             _data.Save(savePlayer, Path.Combine(_path, _fileName));
             Debug.Log("<color=green>Save</color>");
@@ -57,7 +55,6 @@ namespace MyGame
             player.name = newPlayer.Name;
             player.gameObject.SetActive(newPlayer.IsEnabled);
             player.speed = newPlayer.SpeedBall;
-            //bonus =
             Debug.Log(newPlayer);
         }
     }

@@ -45,11 +45,6 @@ namespace MyGame
             userNode.InnerText = "System Language: " + Application.systemLanguage;
             rootNode.AppendChild(userNode);
 
-            //XmlNode BonusNode = xmlDoc.CreateElement("Bonus Positions");
-
-            //var bonus = xmlDoc.CreateElement("BonusPos");
-            //bonus.SetAttribute("value", player.bonuse.GetComponent<GoodBonus>().gameObject.name);
-            //BonusNode.AppendChild(bonus);
 
             xmlDoc.Save(path);
         }
@@ -91,11 +86,6 @@ namespace MyGame
                     {
                         result.SpeedBall = reader.GetAttribute("value").TrySingle();
                     }
-                    //key = "BonusPos";
-                    //if (reader.IsStartElement(key))
-                    //{
-                    //    result.bonuse.GetComponent<GoodBonus>().gameObject.name = reader.GetAttribute("value");
-                    //}
                 }
             }
             return result;

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace MyGame
@@ -11,21 +10,7 @@ namespace MyGame
         public Vector3Serializable Position;
         public bool IsEnabled;
         public float SpeedBall;
-        //public List<InteractiveObject> bonuse;
-
-        //private List<InteractiveObject> SaveBonuses(List<InteractiveObject> interactiveObject)
-        //{
-            
-        //    foreach (var b in interactiveObject)
-        //    {
-        //        if (b is GoodBonus) { interactiveObject.Add(b); }
-        //        if (b is GoodBonusSpeedUp) { interactiveObject.Add(b); }
-        //        if (b is BadBonus) { interactiveObject.Add(b); }
-        //        if (b is BadBonusSlow) { interactiveObject.Add(b); }
-        //    }
-
-        //    return interactiveObject;
-        //}
+        
 
         public override string ToString() => $"<color=yellow>Name</color> {Name}, <color=yellow>Position</color> {Position}, \n" +
             $"<color=yellow>IsVisible</color> {IsEnabled}, <color=yellow>Speed = </color> {SpeedBall}";

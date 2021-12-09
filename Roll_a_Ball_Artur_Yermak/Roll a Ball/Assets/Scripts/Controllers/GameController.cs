@@ -13,6 +13,8 @@ namespace MyGame
         private DisplayWinGame _displayWinGame;
         private DisplayEndGame _displayEndGame;
         private DisplayBonuses _displayBonuses;
+        private DisplaySpeedUp _displaySpeedUp;
+        private DisplaySlow _displaySlow;
 
         private CameraController _cameraController;
         private InputController _inputController;
@@ -51,6 +53,10 @@ namespace MyGame
             _displayWinGame = new DisplayWinGame(_reference.WinGame);
             _displayEndGame = new DisplayEndGame(_reference.EndGame);
             _displayBonuses = new DisplayBonuses(_reference.Bonuse);
+            _displaySpeedUp = new DisplaySpeedUp(_reference.SpeedUp);
+            _displaySlow = new DisplaySlow(_reference.Slow);
+
+
             foreach (var o in _interactiveObject)
             {
                 if (o is BadBonus badBonus)
@@ -103,12 +109,14 @@ namespace MyGame
         private void PickUpChange()
         {
             _player.speed *= 2.0f;
+            _displaySpeedUp.Display();
             Debug.Log("Speed of ball is increased by 2");
         }
 
         private void PickUpChangeSlow()
         {
             _player.speed /= 1.5f;
+            _displaySlow.Display();
             Debug.Log("Speed of ball is decreased by 1.5");
         }
         

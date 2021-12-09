@@ -16,7 +16,7 @@ namespace MyGame
 
         public void Display(int value)
         {
-            _bonuseLabel.text = $"You get {value} points";
+            _bonuseLabel.text = $"You get {value} point(s). Collect 4 points for Win!";
         }
     }
 }
